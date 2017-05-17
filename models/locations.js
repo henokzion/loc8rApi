@@ -1,20 +1,20 @@
-var {Schema, model} = require("mongoose");
+var mongoose = require('mongoose');
 
-var openingTimesSchema = new Schema({
+var openingTimesSchema = new mongoose.Schema({
     days : {type: String, required: true},
     opening : String,
     closing : String,
     closed : {type: Boolean , required: true}
 });
 
-var reviewSchema = new Schema({
+var reviewSchema = new mongoose.Schema({
     author : String,
     rating : {type: Number, required: true, min : 0, max : 0},
     reviewText : String,
     createdOn : {type: Date, "default" : Date.now}
 })
 
-var locationSchema = new Schema({
+var locationSchema = new mongoose.Schema({
     name : {type : String, required: true},
     address : String,
     rating : {type : Number, "default": 0, min: 0, max: 5},
@@ -24,4 +24,4 @@ var locationSchema = new Schema({
     reviews : [reviewSchema]
 });
 
-model('Location', locationSchema, 'locations')
+mongoose.model('Location', locationSchema, 'Locations')

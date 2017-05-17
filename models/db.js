@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
-
 var dbURI = 'mongodb://localhost/Loc8rApi';
+if(process.env.NODE_ENV === 'production'){
+    dbURI = "mongodb://henokzion:henokloc123@ds143231.mlab.com:43231/henokloc"
+}
 mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', ()=>{
