@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var dbURI = 'mongodb://localhost/Loc8rApi';
+var dbURI = 'mongodb://localhost/loc8rApi';
 if(process.env.NODE_ENV === 'production'){
     dbURI = "mongodb://henokzion:henokloc123@ds143231.mlab.com:43231/henokloc"
 }
@@ -24,13 +24,13 @@ var gracefulShutdown = (msg, callback)=>{
 };
 
 
-//hanling graceful shutdown for nodemon
+/*/hanling graceful shutdown for nodemon
 process.once('SIGUSR2', ()=>{
     gracefulShutdown('nodemon restart', ()=>{
         process.kill(process.pid, 'SIGUSR2');
     });
 });
-
+*/
 // handling process termination for local env(unix)
 process.once('SIGINT', ()=>{
     gracefulShutdown('app termination', ()=>{
