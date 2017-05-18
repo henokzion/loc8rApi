@@ -26,8 +26,12 @@ var theEarth = (function(){
 *@apiName GetLocations by distance
 *@apiGroup Locations
 *
-*@apiSuccess {String} name The users name.
-*@apiSuccess {String} age The users age
+*@apiSuccess {String} name Name of the location.
+*@apiSuccess {String} distance the distace from where you are
+*@apiSuccess {String} address the adress of the location.
+*@apiSuccess {Number} rating the avarage rating
+*@apiSuccess {String} facilities the facilities the location provided
+*@apiSuccess {objectId} _id id of the location
 *
 *@apiSuccessExample Example data on success:
 *[
@@ -83,7 +87,33 @@ var locationsListByDistance = (req, res)=>{
         })
 }
 var locationsCreate = (req, res)=>{
-    sendJsonResponse(res, 200, {"message" : "created"});
+    Location.create({
+        name : req.body.name,
+        address : req.body.address,
+        facilities: req.body.facilities.split(","),
+        coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
+        openingTimes : [
+            {
+                days : req.body.days,
+                opening : req.body.opening,
+                closing : req.body.closing,
+                closed : req.body.closed
+            },{
+                days : req.body.days2,
+                opening : req.body.opening2,
+                closing : req.body.closing2,
+                closed : req.body.closed2
+            }
+        ]
+    },(err, location)=>{
+        if(err){
+            sendJsonResponse(res, 400, {
+                "message" : "Not created"
+            });
+            return;
+        }
+        sendJsonResponse(res, 201, location);
+    });
 }
 
 /**
@@ -156,8 +186,60 @@ var locationsReadOne = (req, res)=>{
             sendJsonResponse(res, 200, location);
         });
 }
-var locationsUpdateOne = (req, res)=>{}
-var locationsRemoveOne = (req, res)=>{}
+var locationsUpdateOne = (req, res)=>{
+    Location
+        .findById(req.params.locationId)
+        .select('-reviews -rating')
+        .exec((err, location)=>{
+            if(!location){
+                sendJsonResponse(res, 404, {
+                    "message" : "No location Found"
+                });
+                return;
+            }else if(err){
+                sendJsonResponse(res, 404, {
+                    "message" : "Not Found"
+                });
+                return;
+            }
+            location.name = req.body.name;
+            location.address = req.body.address;
+            location.facilities = req.body.facilities.split(",");
+            location.coords = [parseFloat(req.body.lng),parseFloat(req.body.lat)];
+            location.openingTimes = [{
+                days: req.body.days,
+                opening: req.body.opening,
+                closing: req.body.closing,
+                closed: req.body.closed,
+            }, {
+                days: req.body.days2,
+                opening: req.body.opening2,
+                closing: req.body.closing2,
+                closed: req.body.closed2,
+            }];
+            location.save((err, location)=>{
+                if(err){
+                    sendJsonResponse(res, 400, {
+                        "message" : "couldn't update content"
+                    });
+                    return;
+                }
+
+                sendJsonResponse(res, 200, location);
+            })
+        })
+}
+var locationsRemoveOne = (req, res)=>{
+    Location
+        .findByIdAndRemove(req.params.locationId)
+        .exec((err, location)=>{
+            if(err){
+                sendJsonResponse(res, 400, err);
+                return;
+            }
+            sendJsonResponse(res, 204, null);
+        })
+}
 
 module.exports = {
     locationsListByDistance,

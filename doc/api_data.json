@@ -13,14 +13,42 @@
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>The users name.</p>"
+            "description": "<p>Name of the location.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "age",
-            "description": "<p>The users age</p>"
+            "field": "distance",
+            "description": "<p>the distace from where you are</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>the adress of the location.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "rating",
+            "description": "<p>the avarage rating</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "facilities",
+            "description": "<p>the facilities the location provided</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "objectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>id of the location</p>"
           }
         ]
       },
